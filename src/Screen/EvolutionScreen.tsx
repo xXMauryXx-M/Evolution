@@ -1,9 +1,12 @@
 import React,{useEffect,useState, useRef} from 'react'
-import { Text, View, TouchableOpacity, ActivityIndicator, StyleSheet, Image, Alert } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Tts from 'react-native-tts';
 import Icon from "react-native-vector-icons/Ionicons"
 import Voice from '@react-native-voice/voice';
+import { ActiviIndicatorRn } from '../componets/utils/ActiviIndicatorRn';
+import { IntroductionEvolution } from '../componets/IntroductionEvolution';
+import { VoiceConversation } from '../componets/VoiceConversation';
 export const EvolutionScreen = () =>  {
   const APIKEY="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"
   const [loading, setLoading] = useState(false);
@@ -87,108 +90,29 @@ export const EvolutionScreen = () =>  {
              setLoading(false)
          }
   }
-  const Speack=()=>  SizeAnswer.current>0 && Tts.speak(Answer);
-    const ActiveMic=()=>{
-       setisRecording(!isRecording)
-       startRecording()  
+  const Speack=()=> SizeAnswer.current>0 && Tts.speak(Answer);
+         const ActiveMic=()=>{
+          setisRecording(!isRecording)
+          startRecording()  
+        }
+  const desactiveMic=()=>{
+        setisRecording(!isRecording)
+        stopRecording()
+        handleApiChat()
     }
-const desactiveMic=()=>{
-   setisRecording(!isRecording)
-  stopRecording()
-  handleApiChat()
-}
-
-  if(loading){
-    return (
-    <View style={{flex:1}} >
-      <ActivityIndicator size={60} style={{alignSelf:"center",marginTop:"50%"}} />
-      <Text style={{fontSize:30,color:"black",marginLeft:"20%"}} >Espere un Momento...</Text>
+        if(loading)return<ActiviIndicatorRn/>     
  
-    </View>)
-  }
   return (
-    <LinearGradient  colors={[ '#4e2a6b', '#4e2a6b', '#2b476b', '#418090']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }} style={{ flex: 1 }}>{
-  isRecording?
-<View style={{flexDirection:"column",marginLeft:20}} >
-  <Text style={{color:"white",fontSize:20,marginTop:30}} >Adelante</Text>
-  <Text style={{color:"white",fontSize:25,fontWeight:"bold"}} >Estoy Escuchando...</Text>
+  <>
+  <IntroductionEvolution/>
+  {/* <VoiceConversation /> */}
+  </>
   
-</View>
-  :<View>
-  <View>
-    <Text style={{color:"white",fontSize:17,marginTop:60,marginLeft:20}} > {SizeAnswer.current>0 ? "Respuesta de Evolution!!" :"Hello Anthony!"}</Text>
-     <Text style={{color:"white",fontSize:25,fontWeight:"bold",marginLeft:10}} >{SizeAnswer.current>0 ? "" :"How can i Assiten you?"}</Text>
-    </View>
-     <View style={{flexDirection:"column",marginVertical:40}} >
- {
-   SizeAnswer.current>0 ?
- 
-  null
-:<View>
-
-<View style={{marginLeft:30,flexDirection:"row"}} >
-<Image style={{width:50,height:50}} source={{uri:"https://cdn-icons-png.flaticon.com/512/1802/1802977.png"}} /> 
-<Text style={{color:"white",fontSize:20,fontWeight:"bold",marginLeft:40,marginTop:10,}} >Como puede resolver codigo?</Text>
-</View> 
-
-<View style={{marginLeft:30,flexDirection:"row",marginTop:40}} >
-<Image style={{width:50,height:50,borderRadius:30}} source={{uri:"https://w7.pngwing.com/pngs/870/748/png-transparent-call-center-agent-logo-virtual-assistant-computer-icons-personal-assistant-business-management-support-blue-company-text-thumbnail.png"}} /> 
-<Text style={{color:"white",fontSize:20,fontWeight:"bold",marginLeft:40,marginTop:10,}} >Ayudame en esto</Text>
-</View>
-
-
-<View style={{marginLeft:30,flexDirection:"row",marginTop:40}} >
-<Image style={{width:50,height:50}} source={{uri:"https://icons.iconarchive.com/icons/untergunter/leaf-mimes/512/text-richtext-icon.png"}} /> 
-<Text style={{color:"white",fontSize:20,fontWeight:"bold",marginLeft:40,marginTop:10,}} >Hazme un resumen</Text>
-</View>
-
-
-<View style={{marginLeft:30,flexDirection:"row",marginTop:40}} >
-<Image style={{width:50,height:50}} source={{uri:"https://cdn-icons-png.flaticon.com/512/4576/4576683.png"}} /> 
-<Text style={{color:"white",fontSize:20,fontWeight:"bold",marginLeft:40,marginTop:10,}} >que es la vida?</Text>
-</View>
-</View>
-} 
-  
-    </View>
-  
-  
-  </View>
-}
-
-
-<View style={styles.buttonContainer}>
-  
-  
-        <TouchableOpacity style={styles.button}>
-        <Text style={{fontSize:40,color:"white"}} >⌨</Text>
-        </TouchableOpacity>
-
-{
-  isRecording ?
-  <TouchableOpacity 
-    style={styles.button}
-    onPress={()=>desactiveMic()}         
-  >
-      <Icon name='mic-outline' size={50} color={"#418090"} />
-
-  </TouchableOpacity>
-  :
-  <TouchableOpacity style={styles.button}
- onPress={()=>ActiveMic()}
- >
-        <Icon name='mic-off-outline' size={40}  color={"white"}/>
-        </TouchableOpacity>
- 
-}
-        
-  
-      </View>
-    </LinearGradient>
+    
   );
 };
 
-const styles = StyleSheet.create({
+ export  const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -207,8 +131,7 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:"#1F2043"
     },
-    ButtomCircle:{
-         
+    ButtomCircle:{        
         width:80,
         height:80,
         backgroundColor:"#5F4EBB",
@@ -217,14 +140,10 @@ const styles = StyleSheet.create({
         alignSelf:"center",
         position:"absolute",
         bottom:0
-
-
     },
-    contianerButtom:{
-     
+    contianerButtom:{     
         justifyContent:"space-between",
         flexDirection:"row"
-
     },
   
       
